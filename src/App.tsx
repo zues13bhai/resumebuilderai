@@ -122,6 +122,7 @@ function App() {
               <span>✓ ATS-Friendly Format</span>
               <span>✓ Real-time Optimization</span>
               <span>✓ Professional Templates</span>
+              <span>✓ Comprehensive Analysis</span>
             </div>
           </div>
         </div>

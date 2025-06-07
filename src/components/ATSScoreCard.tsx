@@ -1,7 +1,9 @@
-import React from 'react';
-import { Target, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Target, TrendingUp, AlertCircle, CheckCircle, FileText } from 'lucide-react';
 import { ResumeData, JobAnalysis } from '../types/resume';
 import { calculateATSScore } from '../utils/atsOptimizer';
+import { generateComprehensiveATSReport } from '../utils/atsAnalyzer';
+import { ATSAnalysisReportComponent } from './ATSAnalysisReport';
 
 interface ATSScoreCardProps {
   resumeData: ResumeData;
@@ -9,6 +11,7 @@ interface ATSScoreCardProps {
 }
 
 export const ATSScoreCard: React.FC<ATSScoreCardProps> = ({ resumeData, jobAnalysis }) => {
+  const [showDetailedReport, setShowDetailedReport] = useState(false);
   const score = jobAnalysis ? calculateATSScore(resumeData, jobAnalysis) : 0;
   
   const getScoreColor = (score: number) => {
@@ -62,6 +65,25 @@ export const ATSScoreCard: React.FC<ATSScoreCardProps> = ({ resumeData, jobAnaly
     }
   ].filter(rec => rec.condition);
 
+  const handleGenerateReport = () => {
+    setShowDetailedReport(true);
+  };
+
+  if (showDetailedReport) {
+    const report = generateComprehensiveATSReport(resumeData, jobAnalysis);
+    return (
+      <div className="space-y-6">
+        <button
+          onClick={() => setShowDetailedReport(false)}
+          className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+        >
+          ← Back to Quick Score
+        </button>
+        <ATSAnalysisReportComponent report={report} />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
       <div className="flex items-center mb-4">
@@ -100,10 +122,10 @@ export const ATSScoreCard: React.FC<ATSScoreCardProps> = ({ resumeData, jobAnaly
       </div>
 
       {recommendations.length > 0 && (
-        <div>
-          <h3 className="font-medium text-gray-800 mb-2">Recommendations to Improve:</h3>
+        <div className="mb-4">
+          <h3 className="font-medium text-gray-800 mb-2">Quick Recommendations:</h3>
           <ul className="space-y-1">
-            {recommendations.map((rec, index) => (
+            {recommendations.slice(0, 3).map((rec, index) => (
               <li key={index} className="flex items-start text-sm text-gray-600">
                 <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full mt-2 mr-2 flex-shrink-0"></span>
                 {rec.message}
@@ -112,6 +134,16 @@ export const ATSScoreCard: React.FC<ATSScoreCardProps> = ({ resumeData, jobAnaly
           </ul>
         </div>
       )}
+
+      <div className="flex space-x-3">
+        <button
+          onClick={handleGenerateReport}
+          className="flex-1 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-200"
+        >
+          <FileText className="w-4 h-4 mr-2" />
+          Generate Detailed Report
+        </button>
+      </div>
 
       {!jobAnalysis && (
         <div className="mt-4 p-3 bg-blue-50 rounded-md">
