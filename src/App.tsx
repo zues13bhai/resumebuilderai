@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ResumeProvider } from './contexts/ResumeContext';
+import { PremiumProvider } from './contexts/PremiumContext';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { Dashboard } from './pages/Dashboard';
@@ -60,19 +61,21 @@ function App() {
     <Router>
       <ThemeProvider>
         <AuthProvider>
-          <ResumeProvider>
-            <AppContent />
-            <Toaster 
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#363636',
-                  color: '#fff',
-                },
-              }}
-            />
-          </ResumeProvider>
+          <PremiumProvider>
+            <ResumeProvider>
+              <AppContent />
+              <Toaster 
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#363636',
+                    color: '#fff',
+                  },
+                }}
+              />
+            </ResumeProvider>
+          </PremiumProvider>
         </AuthProvider>
       </ThemeProvider>
     </Router>
