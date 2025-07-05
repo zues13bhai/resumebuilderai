@@ -8,11 +8,12 @@ import { PremiumProvider } from './contexts/PremiumContext';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { Dashboard } from './pages/Dashboard';
-import { ResumeBuilder } from './pages/ResumeBuilder';
+import { ResumeBuilderEnhanced } from './pages/ResumeBuilderEnhanced';
 import { Templates } from './pages/Templates';
 import { Analytics } from './pages/Analytics';
 import { Settings } from './pages/Settings';
 import { Landing } from './pages/Landing';
+import { SharedResume } from './pages/SharedResume';
 import { useAuth } from './hooks/useAuth';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -32,7 +33,12 @@ function AppContent() {
   }
 
   if (!user) {
-    return <Landing />;
+    return (
+      <Routes>
+        <Route path="/shared/:id" element={<SharedResume />} />
+        <Route path="*" element={<Landing />} />
+      </Routes>
+    );
   }
 
   return (
@@ -44,10 +50,11 @@ function AppContent() {
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/builder/:id?" element={<ResumeBuilder />} />
+              <Route path="/builder/:id?" element={<ResumeBuilderEnhanced />} />
               <Route path="/templates" element={<Templates />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/shared/:id" element={<SharedResume />} />
             </Routes>
           </AnimatePresence>
         </main>
@@ -71,6 +78,16 @@ function App() {
                   style: {
                     background: '#363636',
                     color: '#fff',
+                  },
+                  success: {
+                    style: {
+                      background: '#10b981',
+                    },
+                  },
+                  error: {
+                    style: {
+                      background: '#ef4444',
+                    },
                   },
                 }}
               />
