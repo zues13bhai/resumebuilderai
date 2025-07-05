@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Target, Upload, Zap, TrendingUp, AlertCircle } from 'lucide-react';
 import { ResumeData } from '../../types/resume';
-import { useAuth } from '../../hooks/useAuth';
+import { usePremium } from '../../contexts/PremiumContext';
 
 interface JobMatcherProps {
   resumeData: ResumeData;
@@ -11,12 +11,12 @@ interface JobMatcherProps {
 }
 
 export const JobMatcher: React.FC<JobMatcherProps> = ({ resumeData, onUpdate, onClose }) => {
-  const { user } = useAuth();
+  const { isPremium } = usePremium();
   const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [matchResults, setMatchResults] = useState<any>(null);
 
-  if (user?.plan === 'free') {
+  if (!isPremium) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -58,10 +58,7 @@ export const JobMatcher: React.FC<JobMatcherProps> = ({ resumeData, onUpdate, on
               onClick={onClose}
               className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
-              Maybe Later
-            </button>
-            <button className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:shadow-lg transition-all">
-              Upgrade Now
+              Close
             </button>
           </div>
         </motion.div>

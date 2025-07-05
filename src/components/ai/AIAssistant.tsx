@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, MessageCircle, Zap, Target, TrendingUp } from 'lucide-react';
 import { ResumeData } from '../../types/resume';
-import { useAuth } from '../../hooks/useAuth';
+import { usePremium } from '../../contexts/PremiumContext';
 
 interface AIAssistantProps {
   resumeData: ResumeData;
@@ -35,14 +35,14 @@ const aiSuggestions = [
 ];
 
 export const AIAssistant: React.FC<AIAssistantProps> = ({ resumeData, onUpdate, onClose }) => {
-  const { user } = useAuth();
+  const { isPremium } = usePremium();
   const [activeTab, setActiveTab] = useState<'suggestions' | 'chat' | 'analysis'>('suggestions');
   const [chatMessage, setChatMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([
     { type: 'ai', message: 'Hi! I\'m your AI resume assistant. How can I help you improve your resume today?' }
   ]);
 
-  if (user?.plan === 'free') {
+  if (!isPremium) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -84,10 +84,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ resumeData, onUpdate, 
               onClick={onClose}
               className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
-              Maybe Later
-            </button>
-            <button className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all">
-              Upgrade Now
+              Close
             </button>
           </div>
         </motion.div>

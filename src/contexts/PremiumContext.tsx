@@ -7,6 +7,7 @@ interface PremiumContextType {
   upgradeToPremium: () => void;
   checkPremiumStatus: () => boolean;
   premiumExpiryDate: string | null;
+  resetPremium: () => void; // For testing purposes
 }
 
 const PremiumContext = createContext<PremiumContextType | undefined>(undefined);
@@ -33,7 +34,7 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const checkPremiumStatus = (): boolean => {
     try {
-      const premiumStatus = localStorage.getItem('premiumUser');
+      const premiumStatus = localStorage.getItem('isPremium');
       const expiryDate = localStorage.getItem('premiumExpiry');
       
       console.log('Premium status check:', { premiumStatus, expiryDate });
@@ -48,8 +49,10 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
           return true;
         } else {
           // Premium expired
-          localStorage.removeItem('premiumUser');
+          localStorage.removeItem('isPremium');
           localStorage.removeItem('premiumExpiry');
+          localStorage.removeItem('premiumUnlockedAt');
+          localStorage.removeItem('premiumPurchasedAt');
           setIsPremium(false);
           setPremiumExpiryDate(null);
         }
@@ -67,7 +70,7 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + 30); // 30 days access
       
-      localStorage.setItem('premiumUser', 'true');
+      localStorage.setItem('isPremium', 'true');
       localStorage.setItem('premiumExpiry', expiryDate.toISOString());
       localStorage.setItem('premiumUnlockedAt', new Date().toISOString());
       
@@ -87,12 +90,23 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const expiryDate = new Date();
     expiryDate.setMonth(expiryDate.getMonth() + 1); // 1 month access
     
-    localStorage.setItem('premiumUser', 'true');
+    localStorage.setItem('isPremium', 'true');
     localStorage.setItem('premiumExpiry', expiryDate.toISOString());
     localStorage.setItem('premiumPurchasedAt', new Date().toISOString());
     
     setIsPremium(true);
     setPremiumExpiryDate(expiryDate.toISOString());
+  };
+
+  const resetPremium = () => {
+    // For testing purposes - reset premium status
+    localStorage.removeItem('isPremium');
+    localStorage.removeItem('premiumExpiry');
+    localStorage.removeItem('premiumUnlockedAt');
+    localStorage.removeItem('premiumPurchasedAt');
+    setIsPremium(false);
+    setPremiumExpiryDate(null);
+    console.log('Premium status reset');
   };
 
   return (
@@ -102,7 +116,8 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       unlockPremium,
       upgradeToPremium,
       checkPremiumStatus,
-      premiumExpiryDate
+      premiumExpiryDate,
+      resetPremium
     }}>
       {children}
     </PremiumContext.Provider>

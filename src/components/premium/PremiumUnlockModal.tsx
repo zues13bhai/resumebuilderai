@@ -4,12 +4,12 @@ import { X, Crown, Sparkles, Check, AlertCircle, Key } from 'lucide-react';
 import { usePremium } from '../../contexts/PremiumContext';
 import toast from 'react-hot-toast';
 
-interface UnlockPremiumModalProps {
+interface PremiumUnlockModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const UnlockPremiumModal: React.FC<UnlockPremiumModalProps> = ({ isOpen, onClose }) => {
+export const PremiumUnlockModal: React.FC<PremiumUnlockModalProps> = ({ isOpen, onClose }) => {
   const { unlockPremium, upgradeToPremium } = usePremium();
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);

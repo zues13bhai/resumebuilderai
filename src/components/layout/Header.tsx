@@ -11,7 +11,8 @@ import {
   Crown,
   Search,
   ChevronDown,
-  Sparkles
+  Sparkles,
+  Key
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../hooks/useAuth';
@@ -22,7 +23,7 @@ import { UnlockPremiumModal } from '../premium/UnlockPremiumModal';
 export const Header: React.FC = () => {
   const { theme, toggleTheme, language, toggleLanguage } = useTheme();
   const { user, logout } = useAuth();
-  const { isPremium } = usePremium();
+  const { isPremium, resetPremium } = usePremium();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
@@ -78,7 +79,7 @@ export const Header: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
-              {/* Premium Upgrade Button */}
+              {/* Premium Unlock Button */}
               {!isPremium && (
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -86,8 +87,8 @@ export const Header: React.FC = () => {
                   onClick={() => setShowPremiumModal(true)}
                   className="flex items-center px-3 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
                 >
-                  <Crown className="w-4 h-4 mr-2" />
-                  Upgrade
+                  <Key className="w-4 h-4 mr-2" />
+                  Unlock Premium
                 </motion.button>
               )}
 
@@ -171,7 +172,7 @@ export const Header: React.FC = () => {
                   <div className="text-left hidden md:block">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
                     <div className="flex items-center">
-                      <p className="text-xs text-gray-500 capitalize">{user?.plan}</p>
+                      <p className="text-xs text-gray-500 capitalize">{isPremium ? 'Premium' : 'Free'}</p>
                       {isPremium && <PremiumBadge size="sm" showText={false} className="ml-1" />}
                     </div>
                   </div>
@@ -194,13 +195,21 @@ export const Header: React.FC = () => {
                         <Settings className="w-4 h-4 mr-2" />
                         Settings
                       </button>
-                      {!isPremium && (
+                      {!isPremium ? (
                         <button 
                           onClick={() => setShowPremiumModal(true)}
                           className="w-full text-left px-3 py-2 text-sm text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg flex items-center"
                         >
                           <Sparkles className="w-4 h-4 mr-2" />
-                          Upgrade to Premium
+                          Unlock Premium
+                        </button>
+                      ) : (
+                        <button 
+                          onClick={resetPremium}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg flex items-center"
+                        >
+                          <Key className="w-4 h-4 mr-2" />
+                          Reset Premium (Dev)
                         </button>
                       )}
                       <button 

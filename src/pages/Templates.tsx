@@ -11,7 +11,7 @@ import {
   Grid,
   List
 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
+import { usePremium } from '../contexts/PremiumContext';
 
 const templates = [
   {
@@ -79,7 +79,7 @@ const templates = [
 const categories = ['All', 'Professional', 'Executive', 'Creative', 'Minimal', 'Academic', 'Startup'];
 
 export const Templates: React.FC = () => {
-  const { user } = useAuth();
+  const { isPremium } = usePremium();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -94,8 +94,9 @@ export const Templates: React.FC = () => {
 
   const handleUseTemplate = (templateId: string) => {
     const template = templates.find(t => t.id === templateId);
-    if (template?.premium && user?.plan === 'free') {
-      // Show upgrade modal
+    if (template?.premium && !isPremium) {
+      // Show upgrade modal or message
+      alert('This template requires Premium access. Please unlock Premium features first.');
       return;
     }
     // Navigate to builder with template
@@ -236,7 +237,7 @@ export const Templates: React.FC = () => {
                     {template.category}
                   </span>
                 </div>
-                {template.premium && user?.plan === 'free' && (
+                {template.premium && !isPremium && (
                   <Crown className="w-5 h-5 text-yellow-500" />
                 )}
               </div>
@@ -267,7 +268,7 @@ export const Templates: React.FC = () => {
                   onClick={() => handleUseTemplate(template.id)}
                   className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:shadow-lg transition-all text-sm font-medium"
                 >
-                  {template.premium && user?.plan === 'free' ? 'Upgrade to Use' : 'Use Template'}
+                  {template.premium && !isPremium ? 'Unlock to Use' : 'Use Template'}
                 </button>
               </div>
             </div>
@@ -289,7 +290,7 @@ export const Templates: React.FC = () => {
       )}
 
       {/* Upgrade Prompt for Free Users */}
-      {user?.plan === 'free' && (
+      {!isPremium && (
         <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-8 text-white text-center">
           <Crown className="w-12 h-12 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">Unlock Premium Templates</h3>
@@ -297,7 +298,7 @@ export const Templates: React.FC = () => {
             Get access to all premium templates, unlimited downloads, and exclusive designs
           </p>
           <button className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-            Upgrade to Premium - $9.99/month
+            Unlock Premium Features
           </button>
         </div>
       )}
