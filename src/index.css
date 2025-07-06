@@ -13,46 +13,38 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 font-semibold;
+    @apply bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200;
   }
   
   .btn-secondary {
-    @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 font-medium;
+    @apply bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors duration-200;
   }
   
   .form-input {
-    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
   }
   
   .section-card {
-    @apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl p-6 mb-6 border border-gray-200/50 dark:border-gray-700/50;
+    @apply bg-white rounded-lg shadow-md p-6 mb-6;
   }
 }
 
-/* 🌟 UI Upgrade Start */
-/* Enhanced scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(243, 244, 246, 0.5);
-  border-radius: 10px;
+  background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #c1c1c1;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-}
-
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: rgba(31, 41, 55, 0.5);
+  background: #a8a8a8;
 }
 
 /* Print styles for resume */
@@ -71,48 +63,18 @@
   }
 }
 
-/* Enhanced animations */
-@keyframes pulse-glow {
+/* Animation for loading states */
+@keyframes pulse {
   0%, 100% {
     opacity: 1;
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
   }
   50% {
-    opacity: 0.8;
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+    opacity: .5;
   }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-}
-
-.animate-shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Gradient text */
@@ -123,54 +85,16 @@
   background-clip: text;
 }
 
-/* Enhanced hover effects */
+/* Hover effects */
 .hover-lift {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s ease-in-out;
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-}
-
-/* Glass morphism effect */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.glass-dark {
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 /* Focus styles for accessibility */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800;
+  @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
 }
-
-/* Custom button styles */
-.btn-gradient {
-  @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105;
-}
-
-.btn-glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300;
-}
-
-/* Card hover effects */
-.card-hover {
-  @apply transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1;
-}
-
-/* Loading states */
-.skeleton {
-  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
-}
-
-/* Enhanced form inputs */
-.input-enhanced {
-  @apply relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-500 before:to-purple-600 before:opacity-0 hover:before:opacity-10 before:transition-opacity before:duration-300;
-}
-/* 🌟 UI Upgrade End */
