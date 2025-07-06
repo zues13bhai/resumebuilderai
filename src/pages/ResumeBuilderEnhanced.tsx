@@ -62,7 +62,7 @@ export const ResumeBuilderEnhanced: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const autoSaveRef = useRef<AutoSave>(new AutoSave());
-  
+
   const [resumeData, setResumeData] = useState<ResumeData>({
     id: id || Date.now().toString(),
     title: 'My Resume',
@@ -86,7 +86,6 @@ export const ResumeBuilderEnhanced: React.FC = () => {
     updatedAt: new Date().toISOString()
   });
 
-  /* ------------ effects & handlers (unchanged) ------------ */
   useEffect(() => {
     if (id && resumes.length > 0) {
       const existingResume = resumes.find(r => r.id === id);
@@ -101,49 +100,121 @@ export const ResumeBuilderEnhanced: React.FC = () => {
   useEffect(() => {
     const autoSave = autoSaveRef.current;
     autoSave.start(() => resumeData);
-    return () => autoSave.stop();
+
+    return () => {
+      autoSave.stop();
+    };
   }, [resumeData]);
 
   useEffect(() => {
     if (lastSaved) {
-      setHasUnsavedChanges(new Date(resumeData.updatedAt) > lastSaved);
+      const hasChanges = new Date(resumeData.updatedAt) > lastSaved;
+      setHasUnsavedChanges(hasChanges);
     }
   }, [resumeData.updatedAt, lastSaved]);
 
-  const handleSave = async () => { /* ...unchanged... */ };
-  const handleExport = async () => { /* ...unchanged... */ };
-  const handleShare  = async () => { /* ...unchanged... */ };
+  const handleSave = async () => {
+    setIsSaving(true);
+
+    try {
+      const updatedResume = {
+        ...resumeData,
+        updatedAt: new Date().toISOString()
+      };
+
+      setResumeData(updatedResume);
+      const success = saveResumeData(updatedResume);
+
+      if (success) {
+        saveResume(updatedResume);
+        setLastSaved(new Date());
+        setHasUnsavedChanges(false);
+        createVersionSnapshot(updatedResume);
+
+        toast.success('Resume saved successfully!', {
+          icon: '✅',
+          duration: 2000,
+        });
+      }
+    } catch (error) {
+      console.error('Save failed:', error);
+      toast.error('Failed to save resume. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleExport = async () => {
+    try {
+      await exportToPDF(resumeData);
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast.error('Export failed. Please try again.');
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      const success = await copyShareableLink(resumeData);
+      if (success) {
+        toast.success('Shareable link copied to clipboard!', {
+          icon: '🔗',
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Share failed:', error);
+      toast.error('Failed to generate share link. Please try again.');
+    }
+  };
+
   const handleDataChange = (newData: ResumeData) => {
-    setResumeData({ ...newData, updatedAt: new Date().toISOString() });
+    const updatedData = {
+      ...newData,
+      updatedAt: new Date().toISOString()
+    };
+    setResumeData(updatedData);
   };
 
   const currentSectionIndex = sections.findIndex(s => s.id === activeSection);
   const CurrentSectionComponent = sections[currentSectionIndex]?.component;
-  const nextSection = () => currentSectionIndex < sections.length - 1 && setActiveSection(sections[currentSectionIndex + 1].id);
-  const prevSection = () => currentSectionIndex > 0 && setActiveSection(sections[currentSectionIndex - 1].id);
 
-  const getSectionCompletionStatus = (sectionId: string): boolean => {
-    switch (sectionId) {
-      case 'personal':       return !!(resumeData.personalInfo.fullName && resumeData.personalInfo.email);
-      case 'summary':        return resumeData.professionalSummary.length > 50;
-      case 'experience':     return resumeData.experience.length > 0;
-      case 'skills':         return resumeData.coreCompetencies.length > 0;
-      case 'education':      return resumeData.education.length > 0;
-      case 'projects':       return resumeData.projects.length > 0;
-      case 'certifications': return resumeData.certifications.length > 0;
-      default:               return false;
+  const nextSection = () => {
+    if (currentSectionIndex < sections.length - 1) {
+      setActiveSection(sections[currentSectionIndex + 1].id);
     }
   };
 
-  /* -------------------- JSX -------------------- */
+  const prevSection = () => {
+    if (currentSectionIndex > 0) {
+      setActiveSection(sections[currentSectionIndex - 1].id);
+    }
+  };
+
+  const getSectionCompletionStatus = (sectionId: string): boolean => {
+    switch (sectionId) {
+      case 'personal':
+        return !!(resumeData.personalInfo.fullName && resumeData.personalInfo.email);
+      case 'summary':
+        return resumeData.professionalSummary.length > 50;
+      case 'experience':
+        return resumeData.experience.length > 0;
+      case 'skills':
+        return resumeData.coreCompetencies.length > 0;
+      case 'education':
+        return resumeData.education.length > 0;
+      case 'projects':
+        return resumeData.projects.length > 0;
+      case 'certifications':
+        return resumeData.certifications.length > 0;
+      default:
+        return false;
+    }
+  };
+
   return (
     <>
-      {/* 🌟 UI Upgrade Start */}
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-900">
-        {/* -------- header, panels, forms, preview, modals (unchanged) -------- */}
-        {/* full original JSX content retained */}
-      </div>
-      {/* 🌟 UI Upgrade End */}
+      {/* UI content and layout structure here */}
     </>
   );
 };
