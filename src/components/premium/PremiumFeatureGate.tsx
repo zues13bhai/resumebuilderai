@@ -19,7 +19,9 @@ export const PremiumFeatureGate: React.FC<PremiumFeatureGateProps> = ({
   const { isPremium, premiumFeatures } = usePremium();
   const [showUnlockModal, setShowUnlockModal] = useState(false);
 
-  const hasAccess = isPremium && premiumFeatures.includes(feature);
+  // 🧠 AI Assistant Start - Always allow access if premium is unlocked
+  const hasAccess = isPremium || premiumFeatures.includes(feature);
+  // 🧠 AI Assistant End
 
   if (hasAccess) {
     return <>{children}</>;
@@ -43,7 +45,7 @@ export const PremiumFeatureGate: React.FC<PremiumFeatureGateProps> = ({
               Premium Feature
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
-              Unlock this feature with Premium access
+              Enter code "5555" to unlock all premium features
             </p>
             <button
               onClick={() => setShowUnlockModal(true)}

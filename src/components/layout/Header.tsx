@@ -12,7 +12,8 @@ import {
   Search,
   ChevronDown,
   Sparkles,
-  Key
+  Key,
+  Bot
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../hooks/useAuth';
@@ -79,8 +80,8 @@ export const Header: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
-              {/* Premium Unlock Button */}
-              {!isPremium && (
+              {/* 🧠 AI Assistant Start - Show premium status or unlock button */}
+              {!isPremium ? (
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -88,9 +89,15 @@ export const Header: React.FC = () => {
                   className="flex items-center px-3 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
                 >
                   <Key className="w-4 h-4 mr-2" />
-                  Unlock Premium
+                  Enter Code: 5555
                 </motion.button>
+              ) : (
+                <div className="flex items-center px-3 py-2 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-lg text-sm font-medium">
+                  <Crown className="w-4 h-4 mr-2" />
+                  Premium Active
+                </div>
               )}
+              {/* 🧠 AI Assistant End */}
 
               {/* Theme Toggle */}
               <motion.button
@@ -201,7 +208,7 @@ export const Header: React.FC = () => {
                           className="w-full text-left px-3 py-2 text-sm text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg flex items-center"
                         >
                           <Sparkles className="w-4 h-4 mr-2" />
-                          Unlock Premium
+                          Enter Code: 5555
                         </button>
                       ) : (
                         <button 

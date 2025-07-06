@@ -16,10 +16,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Bot
 } from 'lucide-react';
 import { useResume } from '../contexts/ResumeContext';
 import { useAuth } from '../hooks/useAuth';
+import { usePremium } from '../contexts/PremiumContext';
 import { ResumeData } from '../types/resume';
 import { PersonalInfoForm } from '../components/forms/PersonalInfoForm';
 import { ProfessionalSummaryForm } from '../components/forms/ProfessionalSummaryForm';
@@ -29,9 +31,9 @@ import { EducationForm } from '../components/forms/EducationForm';
 import { ProjectsForm } from '../components/forms/ProjectsForm';
 import { CertificationsForm } from '../components/forms/CertificationsForm';
 import { ResumePreviewEnhanced } from '../components/preview/ResumePreviewEnhanced';
-import { AIAssistantEnhanced } from '../components/ai/AIAssistantEnhanced';
+import { AIAssistantAdvanced } from '../components/ai/AIAssistantAdvanced';
 import { TemplateSelector } from '../components/templates/TemplateSelector';
-import { JobMatcher } from '../components/ai/JobMatcher';
+import { JobMatcherEnhanced } from '../components/ai/JobMatcherEnhanced';
 import { saveResumeData, AutoSave, createVersionSnapshot } from '../utils/saveUtils';
 import { exportToPDF } from '../utils/exportUtils';
 import { copyShareableLink } from '../utils/shareUtils';
@@ -50,6 +52,7 @@ const sections = [
 export const ResumeBuilderEnhanced: React.FC = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const { isPremium } = usePremium();
   const { currentResume, setCurrentResume, saveResume, resumes } = useResume();
   const [activeSection, setActiveSection] = useState('personal');
   const [showAI, setShowAI] = useState(false);
@@ -149,15 +152,8 @@ export const ResumeBuilderEnhanced: React.FC = () => {
     }
   };
 
+  // 🧠 AI Assistant Start - Remove premium restrictions for export
   const handleExport = async () => {
-    if (user?.plan === 'free') {
-      toast.error('Export feature requires Premium subscription', {
-        icon: '👑',
-        duration: 3000,
-      });
-      return;
-    }
-    
     try {
       await exportToPDF(resumeData);
     } catch (error) {
@@ -165,6 +161,7 @@ export const ResumeBuilderEnhanced: React.FC = () => {
       toast.error('Export failed. Please try again.');
     }
   };
+  // 🧠 AI Assistant End
 
   const handleShare = async () => {
     try {
@@ -265,6 +262,7 @@ export const ResumeBuilderEnhanced: React.FC = () => {
             </div>
 
             <div className="flex items-center space-x-3">
+              {/* 🧠 AI Assistant Start - Remove premium restrictions */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -273,7 +271,6 @@ export const ResumeBuilderEnhanced: React.FC = () => {
               >
                 <Target className="w-4 h-4 mr-2" />
                 Job Match
-                {user?.plan === 'free' && <Crown className="w-3 h-3 ml-1" />}
               </motion.button>
 
               <motion.button
@@ -282,10 +279,10 @@ export const ResumeBuilderEnhanced: React.FC = () => {
                 onClick={() => setShowAI(true)}
                 className="flex items-center px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
               >
-                <Sparkles className="w-4 h-4 mr-2" />
+                <Bot className="w-4 h-4 mr-2" />
                 AI Assistant
-                {user?.plan === 'free' && <Crown className="w-3 h-3 ml-1" />}
               </motion.button>
+              {/* 🧠 AI Assistant End */}
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -438,10 +435,10 @@ export const ResumeBuilderEnhanced: React.FC = () => {
         </div>
       </div>
 
-      {/* Enhanced Modals */}
+      {/* Enhanced Modals - All accessible */}
       <AnimatePresence>
         {showAI && (
-          <AIAssistantEnhanced
+          <AIAssistantAdvanced
             resumeData={resumeData}
             onUpdate={handleDataChange}
             onClose={() => setShowAI(false)}
@@ -465,7 +462,7 @@ export const ResumeBuilderEnhanced: React.FC = () => {
 
       <AnimatePresence>
         {showJobMatcher && (
-          <JobMatcher
+          <JobMatcherEnhanced
             resumeData={resumeData}
             onUpdate={handleDataChange}
             onClose={() => setShowJobMatcher(false)}

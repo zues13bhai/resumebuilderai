@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Crown, Palette } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { usePremium } from '../../contexts/PremiumContext';
 
 interface TemplateSelectorProps {
   currentTemplate: string;
@@ -21,14 +21,14 @@ const templates = [
     id: 'executive',
     name: 'Executive Elite',
     description: 'Sophisticated layout for senior leadership positions',
-    premium: true,
+    premium: false, // 🧠 AI Assistant Start - Make all templates free
     preview: '/templates/executive-preview.jpg'
   },
   {
     id: 'creative',
     name: 'Creative Portfolio',
     description: 'Bold, artistic design for creative professionals',
-    premium: true,
+    premium: false, // 🧠 AI Assistant Start - Make all templates free
     preview: '/templates/creative-preview.jpg'
   },
   {
@@ -42,28 +42,25 @@ const templates = [
     id: 'academic',
     name: 'Academic Scholar',
     description: 'Traditional format for academic and research positions',
-    premium: true,
+    premium: false, // 🧠 AI Assistant Start - Make all templates free
     preview: '/templates/academic-preview.jpg'
   },
   {
     id: 'startup',
     name: 'Startup Innovator',
     description: 'Dynamic design for startup and entrepreneurial roles',
-    premium: true,
+    premium: false, // 🧠 AI Assistant Start - Make all templates free
     preview: '/templates/startup-preview.jpg'
   }
 ];
 
 export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ currentTemplate, onSelect, onClose }) => {
-  const { user } = useAuth();
+  const { isPremium } = usePremium();
 
   const handleSelect = (templateId: string) => {
-    const template = templates.find(t => t.id === templateId);
-    if (template?.premium && user?.plan === 'free') {
-      // Show upgrade prompt
-      return;
-    }
+    // 🧠 AI Assistant Start - Remove premium restrictions
     onSelect(templateId);
+    // 🧠 AI Assistant End
   };
 
   return (
@@ -87,7 +84,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ currentTempl
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">Choose Template</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Select a professional template for your resume</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">All templates are now available</p>
             </div>
           </div>
           <button
@@ -123,14 +120,6 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ currentTempl
                     </div>
                   </div>
                   
-                  {/* Premium Badge */}
-                  {template.premium && (
-                    <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                      <Crown className="w-3 h-3 mr-1" />
-                      Premium
-                    </div>
-                  )}
-
                   {/* Selected Badge */}
                   {currentTemplate === template.id && (
                     <div className="absolute top-3 left-3 bg-indigo-600 text-white p-1 rounded-full">
@@ -150,11 +139,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ currentTempl
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      {template.premium && user?.plan === 'free' ? (
-                        <span className="text-xs text-orange-600 font-medium">Requires Premium</span>
-                      ) : (
-                        <span className="text-xs text-green-600 font-medium">Available</span>
-                      )}
+                      <span className="text-xs text-green-600 font-medium">Available</span>
                     </div>
                     
                     {currentTemplate === template.id ? (
@@ -163,7 +148,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ currentTempl
                       </span>
                     ) : (
                       <button className="text-xs bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors">
-                        {template.premium && user?.plan === 'free' ? 'Upgrade' : 'Select'}
+                        Select
                       </button>
                     )}
                   </div>
@@ -177,13 +162,11 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ currentTempl
         <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              {templates.filter(t => !t.premium).length} free templates • {templates.filter(t => t.premium).length} premium templates
+              {templates.length} professional templates available
             </div>
-            {user?.plan === 'free' && (
-              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all text-sm">
-                Upgrade for All Templates
-              </button>
-            )}
+            <div className="text-sm text-green-600 font-medium">
+              ✨ All templates unlocked!
+            </div>
           </div>
         </div>
       </motion.div>

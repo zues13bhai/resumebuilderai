@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Target, Upload, Zap, TrendingUp, AlertCircle, CheckCircle, FileText } from 'lucide-react';
 import { ResumeData } from '../../types/resume';
-import { useAuth } from '../../hooks/useAuth';
+import { usePremium } from '../../contexts/PremiumContext';
 
 interface JobMatcherEnhancedProps {
   resumeData: ResumeData;
@@ -24,65 +24,13 @@ interface MatchResult {
 }
 
 export const JobMatcherEnhanced: React.FC<JobMatcherEnhancedProps> = ({ resumeData, onUpdate, onClose }) => {
-  const { user } = useAuth();
+  const { isPremium } = usePremium();
   const [jobDescription, setJobDescription] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [matchResults, setMatchResults] = useState<MatchResult | null>(null);
   const [activeTab, setActiveTab] = useState<'input' | 'results'>('input');
 
-  if (user?.plan === 'free') {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full text-center"
-        >
-          <div className="bg-gradient-to-r from-green-500 to-teal-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Target className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Job Matcher
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Analyze job descriptions and get personalized recommendations to optimize your resume for specific roles.
-          </p>
-          <div className="space-y-3 mb-6">
-            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-              <Zap className="w-4 h-4 mr-2 text-green-500" />
-              Smart keyword matching
-            </div>
-            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-              <TrendingUp className="w-4 h-4 mr-2 text-green-500" />
-              Match score analysis
-            </div>
-            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-              <Target className="w-4 h-4 mr-2 text-green-500" />
-              Tailored suggestions
-            </div>
-          </div>
-          <div className="flex space-x-3">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              Maybe Later
-            </button>
-            <button className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:shadow-lg transition-all">
-              Upgrade Now
-            </button>
-          </div>
-        </motion.div>
-      </motion.div>
-    );
-  }
-
+  // 🧠 AI Assistant Start - Remove premium gate, make fully accessible
   const analyzeJob = async () => {
     if (!jobDescription.trim()) return;
     
@@ -179,6 +127,7 @@ export const JobMatcherEnhanced: React.FC<JobMatcherEnhancedProps> = ({ resumeDa
     }
   };
 
+  // Always render the full component - no premium gate
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -426,3 +375,4 @@ export const JobMatcherEnhanced: React.FC<JobMatcherEnhancedProps> = ({ resumeDa
     </motion.div>
   );
 };
+// 🧠 AI Assistant End

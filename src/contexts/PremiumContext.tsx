@@ -7,7 +7,7 @@ interface PremiumContextType {
   upgradeToPremium: () => void;
   checkPremiumStatus: () => boolean;
   premiumExpiryDate: string | null;
-  resetPremium: () => void; // For testing purposes
+  resetPremium: () => void;
 }
 
 const PremiumContext = createContext<PremiumContextType | undefined>(undefined);
@@ -21,7 +21,13 @@ const PREMIUM_FEATURES = [
   'resume-analytics',
   'theme-customization',
   'unlimited-resumes',
-  'priority-support'
+  'priority-support',
+  'ai-assistant',
+  'export-pdf',
+  'share-resume',
+  'template-customization',
+  'ats-optimization',
+  'keyword-analysis'
 ];
 
 export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -39,22 +45,28 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       
       console.log('Premium status check:', { premiumStatus, expiryDate });
       
-      if (premiumStatus === 'true' && expiryDate) {
-        const expiry = new Date(expiryDate);
-        const now = new Date();
-        
-        if (expiry > now) {
-          setIsPremium(true);
-          setPremiumExpiryDate(expiryDate);
-          return true;
+      if (premiumStatus === 'true') {
+        if (expiryDate) {
+          const expiry = new Date(expiryDate);
+          const now = new Date();
+          
+          if (expiry > now) {
+            setIsPremium(true);
+            setPremiumExpiryDate(expiryDate);
+            return true;
+          } else {
+            // Premium expired
+            localStorage.removeItem('isPremium');
+            localStorage.removeItem('premiumExpiry');
+            localStorage.removeItem('premiumUnlockedAt');
+            localStorage.removeItem('premiumPurchasedAt');
+            setIsPremium(false);
+            setPremiumExpiryDate(null);
+          }
         } else {
-          // Premium expired
-          localStorage.removeItem('isPremium');
-          localStorage.removeItem('premiumExpiry');
-          localStorage.removeItem('premiumUnlockedAt');
-          localStorage.removeItem('premiumPurchasedAt');
-          setIsPremium(false);
-          setPremiumExpiryDate(null);
+          // No expiry date means permanent premium
+          setIsPremium(true);
+          return true;
         }
       }
       
@@ -67,17 +79,34 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const unlockPremium = (code: string): boolean => {
     if (code === PREMIUM_CODE) {
-      const expiryDate = new Date();
-      expiryDate.setDate(expiryDate.getDate() + 30); // 30 days access
-      
+      // Grant permanent premium access
       localStorage.setItem('isPremium', 'true');
-      localStorage.setItem('premiumExpiry', expiryDate.toISOString());
       localStorage.setItem('premiumUnlockedAt', new Date().toISOString());
       
       setIsPremium(true);
-      setPremiumExpiryDate(expiryDate.toISOString());
+      setPremiumExpiryDate(null);
       
-      console.log('Premium unlocked successfully until:', expiryDate);
+      console.log('Premium unlocked permanently with code');
+      
+      // Show success notification
+      const toast = document.createElement('div');
+      toast.innerHTML = `
+        <div class="flex items-center">
+          <span class="text-2xl mr-2">🎉</span>
+          <div>
+            <div class="font-bold">Premium Activated!</div>
+            <div class="text-sm opacity-90">All features are now unlocked</div>
+          </div>
+        </div>
+      `;
+      toast.className = 'fixed top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        if (document.body.contains(toast)) {
+          document.body.removeChild(toast);
+        }
+      }, 5000);
+      
       return true;
     }
     
@@ -86,20 +115,17 @@ export const PremiumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const upgradeToPremium = () => {
-    // This would integrate with payment system
-    const expiryDate = new Date();
-    expiryDate.setMonth(expiryDate.getMonth() + 1); // 1 month access
-    
+    // Grant permanent premium access
     localStorage.setItem('isPremium', 'true');
-    localStorage.setItem('premiumExpiry', expiryDate.toISOString());
     localStorage.setItem('premiumPurchasedAt', new Date().toISOString());
     
     setIsPremium(true);
-    setPremiumExpiryDate(expiryDate.toISOString());
+    setPremiumExpiryDate(null);
+    
+    console.log('Premium upgraded permanently');
   };
 
   const resetPremium = () => {
-    // For testing purposes - reset premium status
     localStorage.removeItem('isPremium');
     localStorage.removeItem('premiumExpiry');
     localStorage.removeItem('premiumUnlockedAt');
