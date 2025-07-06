@@ -39,10 +39,11 @@ export const Header: React.FC = () => {
 
   return (
     <>
+      {/* 🌟 UI Upgrade Start */}
       <motion.header 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"
+        className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50 shadow-sm"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -52,14 +53,14 @@ export const Header: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center"
               >
-                <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-xl">
+                <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-2.5 rounded-2xl shadow-lg">
                   <FileText className="w-6 h-6 text-white" />
                 </div>
-                <div className="ml-3">
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <div className="ml-4">
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                     ResumeAI Pro
                   </h1>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                     AI-Powered Career Builder
                   </p>
                 </div>
@@ -69,42 +70,41 @@ export const Header: React.FC = () => {
             {/* Search Bar */}
             <div className="flex-1 max-w-lg mx-8">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search templates, skills, or get AI help..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-800 border-0 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-gray-700 transition-all duration-200"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-800/50 border-0 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white dark:focus:bg-gray-700/50 transition-all duration-300 text-sm placeholder-gray-500 shadow-sm"
                 />
               </div>
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
-              {/* 🧠 AI Assistant Start - Show premium status or unlock button */}
+            <div className="flex items-center space-x-3">
+              {/* Premium Status/Unlock */}
               {!isPremium ? (
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowPremiumModal(true)}
-                  className="flex items-center px-3 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+                  className="flex items-center px-4 py-2.5 bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-white rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all text-sm font-semibold"
                 >
                   <Key className="w-4 h-4 mr-2" />
                   Enter Code: 5555
                 </motion.button>
               ) : (
-                <div className="flex items-center px-3 py-2 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-lg text-sm font-medium">
+                <div className="flex items-center px-4 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-emerald-500/25">
                   <Crown className="w-4 h-4 mr-2" />
                   Premium Active
                 </div>
               )}
-              {/* 🧠 AI Assistant End */}
 
               {/* Theme Toggle */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm"
               >
                 {theme === 'light' ? (
                   <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
@@ -118,12 +118,9 @@ export const Header: React.FC = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={toggleLanguage}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm"
               >
                 <Globe className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                <span className="ml-1 text-xs font-medium text-gray-600 dark:text-gray-300">
-                  {language.toUpperCase()}
-                </span>
               </motion.button>
 
               {/* Notifications */}
@@ -132,34 +129,42 @@ export const Header: React.FC = () => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setShowNotifications(!showNotifications)}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative"
+                  className="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 relative shadow-sm"
                 >
                   <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <motion.span 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold shadow-lg"
+                    >
                       {unreadCount}
-                    </span>
+                    </motion.span>
                   )}
                 </motion.button>
 
                 {showNotifications && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50"
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    className="absolute right-0 mt-3 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
                   >
-                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700">
                       <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
                     </div>
                     <div className="max-h-64 overflow-y-auto">
                       {notifications.map((notification) => (
-                        <div key={notification.id} className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                          <p className="text-sm text-gray-900 dark:text-white">{notification.message}</p>
+                        <motion.div 
+                          key={notification.id} 
+                          whileHover={{ backgroundColor: 'rgba(99, 102, 241, 0.05)' }}
+                          className="p-4 border-b border-gray-100 dark:border-gray-700 transition-colors"
+                        >
+                          <p className="text-sm text-gray-900 dark:text-white font-medium">{notification.message}</p>
                           <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
                           {notification.unread && (
-                            <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                            <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2"></div>
                           )}
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </motion.div>
@@ -171,13 +176,13 @@ export const Header: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className="flex items-center space-x-3 p-2 rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
                     <User className="w-4 h-4 text-white" />
                   </div>
                   <div className="text-left hidden md:block">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{user?.name}</p>
                     <div className="flex items-center">
                       <p className="text-xs text-gray-500 capitalize">{isPremium ? 'Premium' : 'Free'}</p>
                       {isPremium && <PremiumBadge size="sm" showText={false} className="ml-1" />}
@@ -188,43 +193,49 @@ export const Header: React.FC = () => {
 
                 {showUserMenu && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50"
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    className="absolute right-0 mt-3 w-56 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
                   >
-                    <div className="p-2">
+                    <div className="p-3">
                       {isPremium && (
-                        <div className="px-3 py-2 mb-2">
+                        <div className="px-3 py-2 mb-2 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl">
                           <PremiumBadge size="sm" />
                         </div>
                       )}
-                      <button className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex items-center">
-                        <Settings className="w-4 h-4 mr-2" />
+                      <motion.button 
+                        whileHover={{ backgroundColor: 'rgba(99, 102, 241, 0.1)' }}
+                        className="w-full text-left px-3 py-3 text-sm text-gray-700 dark:text-gray-300 rounded-xl flex items-center transition-colors"
+                      >
+                        <Settings className="w-4 h-4 mr-3" />
                         Settings
-                      </button>
+                      </motion.button>
                       {!isPremium ? (
-                        <button 
+                        <motion.button 
+                          whileHover={{ backgroundColor: 'rgba(251, 191, 36, 0.1)' }}
                           onClick={() => setShowPremiumModal(true)}
-                          className="w-full text-left px-3 py-2 text-sm text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg flex items-center"
+                          className="w-full text-left px-3 py-3 text-sm text-yellow-600 rounded-xl flex items-center transition-colors"
                         >
-                          <Sparkles className="w-4 h-4 mr-2" />
+                          <Sparkles className="w-4 h-4 mr-3" />
                           Enter Code: 5555
-                        </button>
+                        </motion.button>
                       ) : (
-                        <button 
+                        <motion.button 
+                          whileHover={{ backgroundColor: 'rgba(107, 114, 128, 0.1)' }}
                           onClick={resetPremium}
-                          className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg flex items-center"
+                          className="w-full text-left px-3 py-3 text-sm text-gray-600 rounded-xl flex items-center transition-colors"
                         >
-                          <Key className="w-4 h-4 mr-2" />
+                          <Key className="w-4 h-4 mr-3" />
                           Reset Premium (Dev)
-                        </button>
+                        </motion.button>
                       )}
-                      <button 
+                      <motion.button 
+                        whileHover={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}
                         onClick={logout}
-                        className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                        className="w-full text-left px-3 py-3 text-sm text-red-600 rounded-xl transition-colors"
                       >
                         Sign Out
-                      </button>
+                      </motion.button>
                     </div>
                   </motion.div>
                 )}
@@ -233,6 +244,7 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </motion.header>
+      {/* 🌟 UI Upgrade End */}
 
       <UnlockPremiumModal
         isOpen={showPremiumModal}

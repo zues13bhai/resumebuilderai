@@ -107,31 +107,49 @@ export const Dashboard: React.FC = () => {
 
   return (
     <>
+      {/* 🌟 UI Upgrade Start */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-8"
       >
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 text-white">
+        <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl p-8 text-white shadow-2xl shadow-indigo-500/25">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2 flex items-center">
+              <motion.h1 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-3xl font-bold mb-3 flex items-center"
+              >
                 Welcome back, {user?.name}! 👋
-                {isPremium && <PremiumBadge size="md" className="ml-3" />}
-              </h1>
-              <p className="text-indigo-100 text-lg">
+                {isPremium && <PremiumBadge size="md" className="ml-4" />}
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-indigo-100 text-lg font-medium"
+              >
                 Ready to build your next career milestone?
-              </p>
+              </motion.p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold">{isPremium ? 'Premium' : 'Free'}</div>
-              <div className="text-indigo-100">Plan</div>
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-3xl font-bold mb-1"
+              >
+                {isPremium ? 'Premium' : 'Free'}
+              </motion.div>
+              <div className="text-indigo-100 font-medium">Plan</div>
               {!isPremium && (
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowPremiumModal(true)}
-                  className="mt-2 bg-white text-indigo-600 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors"
+                  className="mt-3 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-white/30 transition-all duration-300 border border-white/20"
                 >
                   Upgrade to Premium
                 </motion.button>
@@ -148,18 +166,21 @@ export const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg bg-gradient-to-r ${stat.color}`}>
+                <div className={`p-4 rounded-2xl bg-gradient-to-r ${stat.color} shadow-lg`}>
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-sm text-green-600 font-medium">{stat.change}</span>
+                <span className="text-sm text-green-600 font-semibold bg-green-50 px-3 py-1 rounded-full">
+                  {stat.change}
+                </span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 {stat.value}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">{stat.title}</p>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">{stat.title}</p>
             </motion.div>
           ))}
         </div>
@@ -172,22 +193,22 @@ export const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.03, y: -5 }}
               whileTap={{ scale: 0.98 }}
               onClick={action.action}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all text-left relative overflow-hidden group"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 text-left relative overflow-hidden group border border-gray-100 dark:border-gray-700"
             >
-              <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-5 transition-opacity`} />
-              <div className={`p-3 rounded-lg bg-gradient-to-r ${action.color} w-fit mb-4`}>
+              <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+              <div className={`p-4 rounded-2xl bg-gradient-to-r ${action.color} w-fit mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                 <action.icon className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2 flex items-center text-lg">
                 {action.title}
                 {action.premium && !isPremium && (
                   <Crown className="w-4 h-4 text-yellow-500 ml-2" />
                 )}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                 {action.description}
               </p>
             </motion.button>
@@ -198,35 +219,37 @@ export const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Resumes */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Your Resumes
                 </h2>
                 <Link
                   to="/builder"
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all flex items-center"
+                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 flex items-center group"
                 >
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
                   New Resume
                 </Link>
               </div>
 
               {resumes.length === 0 ? (
-                <div className="text-center py-12">
-                  <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                <div className="text-center py-16">
+                  <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <FileText className="w-10 h-10 text-gray-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     No resumes yet
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    Create your first resume to get started
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm mx-auto">
+                    Create your first resume to get started on your career journey
                   </p>
                   <Link
                     to="/builder"
-                    className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all inline-flex items-center"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 inline-flex items-center group"
                   >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Resume
+                    <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform duration-300" />
+                    Create Your First Resume
                   </Link>
                 </div>
               ) : (
@@ -236,55 +259,68 @@ export const Dashboard: React.FC = () => {
                       key={resume.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      whileHover={{ scale: 1.01 }}
+                      className="border border-gray-200 dark:border-gray-700 rounded-2xl p-5 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300 bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-750"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                          <div className="w-12 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                            <FileText className="w-6 h-6 text-white" />
+                          <div className="w-14 h-18 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <FileText className="w-7 h-7 text-white" />
                           </div>
                           <div>
-                            <h3 className="font-semibold text-gray-900 dark:text-white">
+                            <h3 className="font-bold text-gray-900 dark:text-white text-lg">
                               {resume.title || 'Untitled Resume'}
                             </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                               Updated {new Date(resume.updatedAt || Date.now()).toLocaleDateString()}
                             </p>
-                            <div className="flex items-center space-x-4 mt-1">
-                              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                            <div className="flex items-center space-x-4">
+                              <span className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 px-3 py-1.5 rounded-full font-semibold">
                                 ATS Score: 85%
                               </span>
-                              <span className="text-xs text-gray-500">
+                              <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-full">
                                 142 views
                               </span>
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                          <motion.button 
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200"
+                          >
                             <Eye className="w-4 h-4" />
-                          </button>
-                          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                          </motion.button>
+                          <motion.button 
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200"
+                          >
                             <Share2 className="w-4 h-4" />
-                          </button>
+                          </motion.button>
                           <Link
                             to={`/builder/${resume.id}`}
-                            className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors"
+                            className="p-3 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all duration-200"
                           >
                             <Edit3 className="w-4 h-4" />
                           </Link>
-                          <button
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={() => duplicateResume(resume.id)}
-                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                            className="p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all duration-200"
                           >
                             <Copy className="w-4 h-4" />
-                          </button>
-                          <button
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={() => deleteResume(resume.id)}
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                            className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all duration-200"
                           >
                             <Trash2 className="w-4 h-4" />
-                          </button>
+                          </motion.button>
                         </div>
                       </div>
                     </motion.div>
@@ -297,26 +333,32 @@ export const Dashboard: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Recent Activity */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                 Recent Activity
               </h3>
               <div className="space-y-4">
                 {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <div className={`w-2 h-2 rounded-full mt-2 ${
+                  <motion.div 
+                    key={index} 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-start space-x-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                  >
+                    <div className={`w-3 h-3 rounded-full mt-2 ${
                       activity.type === 'view' ? 'bg-blue-500' :
                       activity.type === 'ai' ? 'bg-purple-500' :
                       activity.type === 'download' ? 'bg-green-500' :
                       'bg-orange-500'
-                    }`} />
+                    } shadow-lg`} />
                     <div>
-                      <p className="text-sm text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-900 dark:text-white font-medium">
                         {activity.action}
                       </p>
                       <p className="text-xs text-gray-500">{activity.time}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -328,43 +370,59 @@ export const Dashboard: React.FC = () => {
                 onUpdate={() => {}} 
               />
             ) : (
-              <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl p-6 text-white">
+              <div className="bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 rounded-2xl p-6 text-white shadow-2xl shadow-purple-500/25">
                 <div className="flex items-center mb-4">
-                  <Zap className="w-6 h-6 mr-2" />
-                  <h3 className="text-lg font-semibold">AI Insights</h3>
+                  <Zap className="w-6 h-6 mr-3" />
+                  <h3 className="text-lg font-bold">AI Insights</h3>
                 </div>
-                <p className="text-purple-100 mb-4 text-sm">
+                <p className="text-purple-100 mb-4 text-sm leading-relaxed">
                   Your resume could benefit from more quantified achievements. 
                   Add specific metrics to increase your ATS score by 15%.
                 </p>
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowPremiumModal(true)}
-                  className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors"
+                  className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-white/30 transition-all duration-300 border border-white/20 w-full"
                 >
                   Unlock AI Features
-                </button>
+                </motion.button>
               </div>
             )}
 
             {/* Upgrade Prompt for Free Users */}
             {!isPremium && (
-              <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl p-6 text-white">
+              <div className="bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400 rounded-2xl p-6 text-white shadow-2xl shadow-orange-500/25">
                 <div className="flex items-center mb-4">
-                  <Crown className="w-6 h-6 mr-2" />
-                  <h3 className="text-lg font-semibold">Unlock Premium</h3>
+                  <Crown className="w-6 h-6 mr-3" />
+                  <h3 className="text-lg font-bold">Unlock Premium</h3>
                 </div>
-                <ul className="text-yellow-100 mb-4 text-sm space-y-1">
-                  <li>• Unlimited resumes</li>
-                  <li>• AI-powered suggestions</li>
-                  <li>• Premium templates</li>
-                  <li>• Analytics dashboard</li>
+                <ul className="text-yellow-100 mb-4 text-sm space-y-2">
+                  <li className="flex items-center">
+                    <div className="w-1.5 h-1.5 bg-yellow-200 rounded-full mr-2"></div>
+                    Unlimited resumes
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-1.5 h-1.5 bg-yellow-200 rounded-full mr-2"></div>
+                    AI-powered suggestions
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-1.5 h-1.5 bg-yellow-200 rounded-full mr-2"></div>
+                    Premium templates
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-1.5 h-1.5 bg-yellow-200 rounded-full mr-2"></div>
+                    Analytics dashboard
+                  </li>
                 </ul>
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowPremiumModal(true)}
-                  className="bg-white text-orange-600 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors w-full"
+                  className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-white/30 transition-all duration-300 border border-white/20 w-full"
                 >
                   Upgrade Now - $9.99/month
-                </button>
+                </motion.button>
               </div>
             )}
           </div>
@@ -372,11 +430,17 @@ export const Dashboard: React.FC = () => {
 
         {/* Premium Analytics Section */}
         {isPremium && (
-          <div className="mt-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8"
+          >
             <ResumeAnalytics />
-          </div>
+          </motion.div>
         )}
       </motion.div>
+      {/* 🌟 UI Upgrade End */}
 
       <UnlockPremiumModal
         isOpen={showPremiumModal}
